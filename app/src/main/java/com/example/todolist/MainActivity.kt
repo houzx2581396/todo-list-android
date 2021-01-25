@@ -22,9 +22,8 @@ class MainActivity : AppCompatActivity() {
         missionViewModel.missions.observe(this, Observer { mission ->
             missionAdapter.submitList(mission)
         })
-
         add_mission_btn.setOnClickListener {
-            missionViewModel.addNewTodo("gogo")
+            missionViewModel.addNewTodo("name")
         }
     }
 }

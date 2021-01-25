@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.mission_item.view.*
 
-class MissionAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(
-    object : DiffUtil.ItemCallback<Todo>() {
-        override fun areItemsTheSame(oldItem: Todo, newItem: Todo): Boolean {
-            return oldItem.viewType == newItem.viewType
+class MissionAdapter : ListAdapter<Mission, RecyclerView.ViewHolder>(
+    object : DiffUtil.ItemCallback<Mission>() {
+        override fun areItemsTheSame(oldItem: Mission, newItem: Mission): Boolean {
+            return oldItem.name == newItem.name
         }
 
-        override fun areContentsTheSame(oldItem: Todo, newItem: Todo): Boolean {
+        override fun areContentsTheSame(oldItem: Mission, newItem: Mission): Boolean {
             return oldItem == newItem
         }
 
@@ -26,7 +26,7 @@ class MissionAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val mission = getItem(position)) {
-            is Todo.Mission -> (holder as MissionViewHolder).bind(mission)
+            is Mission -> (holder as MissionViewHolder).bind(mission)
         }
     }
 
@@ -35,7 +35,7 @@ class MissionAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(
 class MissionViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.mission_item, parent, false)
 ) {
-    fun bind(mission: Todo.Mission) {
+    fun bind(mission: Mission) {
         val missionItem: AppCompatCheckBox = itemView.mission_item
         missionItem.text = mission.name
         missionItem.isChecked = mission.checked
