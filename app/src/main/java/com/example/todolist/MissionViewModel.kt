@@ -1,20 +1,18 @@
 package com.example.todolist
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class MissionViewModel : ViewModel() {
-    var missions: MutableLiveData<List<Mission>> = MutableLiveData(mutableListOf<Mission>())
 
-    private var count = 0
+    val onNewTodo = MutableLiveData<String>()
 
-    fun addNewTodo(name: String) {
-        val newList: List<Mission> = missions.value?.toMutableList()?.apply {
-            add(Mission("mission$count", false))
-        } ?: listOf()
-
-        missions.postValue(newList)
-
-        count++
+    val todoLiveData: LiveData<List<Mission>> = MediatorLiveData<List<Mission>>().apply {
+        addSource(onNewTodo) { text ->
+            val todo = Mission(text, false)
+            this.value = this.value!! + listOf(todo)
+        }
     }
 }
