@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.todolist.data.AppDatabase
+import com.example.todolist.repository.MissionItemRepository
 import kotlinx.android.synthetic.main.todo_list_fragment.*
 
 class TodoListFragment : Fragment() {
@@ -29,12 +31,19 @@ class TodoListFragment : Fragment() {
         todo_list_view.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        val missionViewModel =
-            ViewModelProvider(requireActivity()).get(MissionViewModel::class.java)
+        val missionItemDb = AppDatabase.getInstance(requireActivity().applicationContext)
+        val missionItemRepo = MissionItemRepository(missionItemDb)
+        val viewModelFactory = AnyViewModelFactory {
+            MissionViewModel(missionItemRepo)
+        }
 
-//        missionViewModel.todoLiveData.observe(viewLifecycleOwner, Observer { todos: List<Mission> ->
-//                missionAdapter.submitList(todos)
-//            })
+        val missionViewModel =
+            ViewModelProvider(requireActivity(), viewModelFactory).get(MissionViewModel::class.java)
+        missionViewModel.missionLiveData.observe(
+            viewLifecycleOwner,
+            Observer { mission: List<Mission> ->
+                missionAdapter.submitList(mission)
+            })
 
         add_mission_btn.setOnClickListener {
             findNavController().navigate(TodoListFragmentDirections.actionTodoListFragmentToAddMissionFragment())

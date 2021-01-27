@@ -1,5 +1,7 @@
 package com.example.todolist
 
+import java.util.*
+
 //sealed class Todo(val viewType: Int) {
 //
 //    data class Title(
@@ -17,6 +19,8 @@ package com.example.todolist
 //    }
 //}
 data class Mission(
+    val id: Int,
     val name: String,
-    val checked: Boolean
+    val checked: Boolean,
+    val createdAt: Date
 )

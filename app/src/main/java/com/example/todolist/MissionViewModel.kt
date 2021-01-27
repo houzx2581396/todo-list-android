@@ -1,18 +1,37 @@
 package com.example.todolist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.example.todolist.data.MissionItem
+import com.example.todolist.repository.MissionItemRepository
+import kotlinx.coroutines.launch
+import java.util.*
 
-class MissionViewModel : ViewModel() {
+class MissionViewModel(private val repository: MissionItemRepository) : ViewModel() {
 
-    val onNewTodo = MutableLiveData<String>()
+    val missionLiveData: LiveData<List<Mission>> = MediatorLiveData<List<Mission>>().apply {
+        val source = repository.getMissionItem().map {
+            it.map { missionItem ->
+                Mission(
+                    missionItem.id,
+                    missionItem.mission,
+                    missionItem.isFinished,
+                    missionItem.createdAt
+                )
+            }
+        }
+        addSource(source) {
+            this.value = it
+        }
+    }
 
-    val todoLiveData: LiveData<List<Mission>> = MediatorLiveData<List<Mission>>().apply {
-        addSource(onNewTodo) { text ->
-            val todo = Mission(text, false)
-            this.value = this.value!! + listOf(todo)
+    fun createNewMission(mission: String) {
+        val missionItem = MissionItem(
+            mission = mission,
+            isFinished = false,
+            createdAt = Date()
+        )
+        viewModelScope.launch {
+            repository.insertMissionItem(missionItem)
         }
     }
 }
