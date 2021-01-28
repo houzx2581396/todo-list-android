@@ -34,4 +34,33 @@ class MissionViewModel(private val repository: MissionItemRepository) : ViewMode
             repository.insertMissionItem(missionItem)
         }
     }
+
+    fun isFinished(mission: Mission) {
+        val missionItem = MissionItem(
+            mission = mission.name,
+            isFinished = true,
+            createdAt = Date()
+        ).apply { id = mission.id }
+
+        when (mission.checked) {
+            true -> missionItem.isFinished = false
+            false -> missionItem.isFinished = true
+        }
+
+        viewModelScope.launch {
+            repository.updateMission(missionItem)
+        }
+    }
+
+    fun deleteMission(mission: Mission) {
+        val missionItem = MissionItem(
+            mission = mission.name,
+            isFinished = false,
+            createdAt = Date()
+        ).apply { id = mission.id }
+
+        viewModelScope.launch {
+            repository.deleteMission(missionItem)
+        }
+    }
 }

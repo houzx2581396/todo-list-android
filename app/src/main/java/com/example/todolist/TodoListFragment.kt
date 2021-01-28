@@ -26,11 +26,6 @@ class TodoListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val missionAdapter = MissionAdapter()
-        todo_list_view.adapter = missionAdapter
-        todo_list_view.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
         val missionItemDb = AppDatabase.getInstance(requireActivity().applicationContext)
         val missionItemRepo = MissionItemRepository(missionItemDb)
         val viewModelFactory = AnyViewModelFactory {
@@ -39,6 +34,22 @@ class TodoListFragment : Fragment() {
 
         val missionViewModel =
             ViewModelProvider(requireActivity(), viewModelFactory).get(MissionViewModel::class.java)
+
+        val missionAdapter = MissionAdapter()
+        todo_list_view.adapter = missionAdapter.apply {
+            onMissionChangeListener = object : MissionAdapter.OnMissionChangeListener {
+                override fun onChange(mission: Mission) {
+                    missionViewModel.isFinished(mission)
+                }
+
+                override fun delete(mission: Mission) {
+                    missionViewModel.deleteMission(mission)
+                }
+            }
+        }
+
+        todo_list_view.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         missionViewModel.missionLiveData.observe(
             viewLifecycleOwner,
             Observer { mission: List<Mission> ->

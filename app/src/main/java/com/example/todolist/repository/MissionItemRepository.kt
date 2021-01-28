@@ -14,4 +14,12 @@ class MissionItemRepository(
     fun getMissionItem(): LiveData<List<MissionItem>> {
         return database.missionItemDao().findAll()
     }
+
+    suspend fun updateMission(missionItem: MissionItem) {
+        database.missionItemDao().update(missionItem)
+    }
+
+    suspend fun deleteMission(missionItem: MissionItem) {
+        database.missionItemDao().delete(missionItem)
+    }
 }

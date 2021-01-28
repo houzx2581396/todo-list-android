@@ -41,7 +41,7 @@ class AddMissionFragment : Fragment() {
                 new_mission.error = "請輸入待辦事項"
             } else {
                 new_mission.error = null
-                
+
                 view.clearFocus()
                 missionViewModel.createNewMission(new_mission.text.toString())
                 inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)

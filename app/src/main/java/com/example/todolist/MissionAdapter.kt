@@ -2,6 +2,7 @@ package com.example.todolist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -20,25 +21,54 @@ class MissionAdapter : ListAdapter<Mission, RecyclerView.ViewHolder>(
 
     }
 ) {
+    interface OnMissionChangeListener {
+        fun onChange(mission: Mission)
+        fun delete(mission: Mission)
+    }
+
+    var onMissionChangeListener: OnMissionChangeListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return MissionViewHolder(parent)
+        return MissionViewHolder(parent, onMissionChangeListener)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (val mission = getItem(position)) {
-            is Mission -> (holder as MissionViewHolder).bind(mission)
-        }
+        val mission = getItem(position)
+        (holder as MissionViewHolder).bind(mission)
     }
-
 }
 
-class MissionViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+class MissionViewHolder(
+    parent: ViewGroup,
+    private val onMissionChangeListener: MissionAdapter.OnMissionChangeListener?
+) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.mission_item, parent, false)
 ) {
     fun bind(mission: Mission) {
         val missionItem: AppCompatCheckBox = itemView.mission_item
         missionItem.text = mission.name
         missionItem.isChecked = mission.checked
-    }
+        missionItem.setOnClickListener {
+            onMissionChangeListener?.onChange(
+                Mission(
+                    mission.id,
+                    mission.name,
+                    mission.checked,
+                    mission.createdAt
+                )
+            )
+        }
 
+        val deleteBtn: AppCompatButton = itemView.delete_mission_btn
+        deleteBtn.setOnClickListener {
+            onMissionChangeListener?.delete(
+                Mission(
+                    mission.id,
+                    mission.name,
+                    mission.checked,
+                    mission.createdAt
+                )
+            )
+        }
+    }
 }
