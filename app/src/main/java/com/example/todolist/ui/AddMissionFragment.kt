@@ -1,4 +1,4 @@
-package com.example.todolist
+package com.example.todolist.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -9,6 +9,8 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.todolist.AnyViewModelFactory
+import com.example.todolist.R
 import com.example.todolist.data.AppDatabase
 import com.example.todolist.repository.MissionItemRepository
 import kotlinx.android.synthetic.main.add_mission_fragment.*
