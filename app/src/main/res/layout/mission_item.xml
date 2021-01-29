@@ -18,13 +18,6 @@
             tools:text="wake up" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/edit_mission_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="edit" />
-
-        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/delete_mission_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
