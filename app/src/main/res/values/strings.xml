@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">TodoList</string>
     <string name="add">ADD</string>
-    <string name="title">This is Title</string>
+    <string name="description">請輸入代辦事項</string>
 </resources>

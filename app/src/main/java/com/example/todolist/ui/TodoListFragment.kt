@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.*
 import com.example.todolist.data.AppDatabase
 import com.example.todolist.repository.MissionItemRepository
+import kotlinx.android.synthetic.main.mission_item.*
 import kotlinx.android.synthetic.main.todo_list_fragment.*
 
 class TodoListFragment : Fragment() {
@@ -47,7 +48,6 @@ class TodoListFragment : Fragment() {
                 }
             }
         }
-
         todo_list_view.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         missionViewModel.missionLiveData.observe(
